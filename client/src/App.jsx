@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+const API = "https://my-todo-list-xiif.onrender.com";
+
 function App() {
 
   const [task, setTask] = useState({
@@ -17,21 +19,27 @@ function App() {
     try {
 
       const response = await axios.get(
-        "http://localhost:5000/tasks"
+        `${API}/tasks`
       );
 
       setTasks(response.data);
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        error.response?.data || error.message
+      );
 
     }
 
   };
 
   useEffect(() => {
-    fetchTasks();
+
+    setTimeout(() => {
+      fetchTasks();
+    }, 3000);
+
   }, []);
 
   const handleChange = (e) => {
@@ -46,14 +54,16 @@ function App() {
   const addTask = async () => {
 
     if (!task.title) {
+
       alert("Please enter task");
       return;
+
     }
 
     try {
 
       const response = await axios.post(
-        "http://localhost:5000/tasks/add",
+        `${API}/tasks/add`,
         task
       );
 
@@ -70,9 +80,11 @@ function App() {
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        error.response?.data || error.message
+      );
 
-      alert("Error adding task");
+      alert("Backend server is not responding");
 
     }
 
@@ -83,14 +95,16 @@ function App() {
     try {
 
       await axios.put(
-        `http://localhost:5000/tasks/complete/${id}`
+        `${API}/tasks/complete/${id}`
       );
 
       fetchTasks();
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        error.response?.data || error.message
+      );
 
     }
 
@@ -101,14 +115,16 @@ function App() {
     try {
 
       await axios.delete(
-        `http://localhost:5000/tasks/delete/${id}`
+        `${API}/tasks/delete/${id}`
       );
 
       fetchTasks();
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        error.response?.data || error.message
+      );
 
     }
 
